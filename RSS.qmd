@@ -1,0 +1,67 @@
+---
+title: "RSS"
+format: html
+embed-resources: true
+editor: source
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+```{r setup, include=FALSE}
+pacman::p_load(tidyRSS,dplyr,DT,purrr,stringr,lubridate)
+
+wrangle_feed <- function(the_feed_url, the_feed_dataframe = myfeeds) {
+  my_feed_data <- tidyRSS::tidyfeed(the_feed_url)
+  return(my_feed_data)
+}
+```
+
+```{r}
+myfeeds <- data.frame(feed_title = c("jxb","cropscience"),
+                      feed_url = c(  "https://academic.oup.com/rss/site_5304/3170.xml",
+                                     "https://acsess.onlinelibrary.wiley.com/action/showFeed?jc=14350653&type=etoc&feed=rss")
+) %>% 
+  arrange(feed_title)
+
+wrangle_feed <- function(the_feed_url, the_feed_dataframe = myfeeds) {
+  my_feed_data <- tidyRSS::tidyfeed(the_feed_url)%>%
+    select(feed_pub_date,item_link,item_title,item_description)
+  return(my_feed_data)
+}
+
+feed_test <- map(myfeeds$feed_url, wrangle_feed)
+
+firstm <- feed_test %>% 
+  purrr::map_dfr(.,function(journal){
+    journal %>%
+      dplyr::filter(grepl("(W|w)heat",item_title)) 
+    
+  }) 
+
+```
+:::{.column-page}
+
+```{r}
+# firstm %>%
+#   mutate(website=paste0("[", item_title, "](http://", item_link, ")")) %>%
+#   select(-c(item_link,item_title)) %>%
+#   knitr::kable()
+
+firstm %>%
+  # to show hyper link at the end
+  mutate(website=
+           str_glue("{item_title}, <strong> <a target = '_blank' href = '{item_link}'> >></a></strong>")) %>%
+  select(-c(item_link,item_title)) %>%
+  DT::datatable(., filter = 'top', escape = FALSE, rownames = FALSE,
+                options = list(
+                  search = list(regex = TRUE, caseInsensitive = TRUE),
+                  pageLength = 25,
+                  lengthMenu = c(25, 50, 100, 200),
+                  autowidth = TRUE,
+                  columnDefs = list(list(width = '80%', targets = list(2)))
+                )
+  )
+```
+
+:::
