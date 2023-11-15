@@ -1,5 +1,5 @@
 rm(list=ls())
-
+pacman::p_load(dplyr,purrr,foreach)
 myfeeds <- data.frame(
   feed_title =c(
     "Field Crops Research",                
@@ -57,7 +57,8 @@ RSS_ls<- purrr::imap(1:nrow(myfeeds), ~{
 })
 
 sdf <- RSS_ls %>% Reduce("rbind",.)
-
+saveRDS(sdf,paste0(getwd(),"/data/",sprintf("%s_raw.RDS",Sys.Date())),
+        compress=T)
 # -------------------------------------------------------------------------
 
 source("src/advance_filter.R")

@@ -13,7 +13,7 @@ pacman::p_load(tidyRSS,dplyr,DT,purrr,stringr,lubridate)
 fnam <- list.files("data","*.RDS")
 firstm <- map_dfr(fnam,~{
   file.path("data",.x) %>% readRDS()
-})
+}) %>% distinct()
 ```
 
 :::{.column-page}
