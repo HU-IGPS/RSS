@@ -3,6 +3,12 @@
 
 ## RSS reader: Keep your academic knowledge up to date!
 
+[![Website -
+pkgdown](https://img.shields.io/badge/website-GUI-green)](https://0et5ol-tien0cheng.shinyapps.io/RSSjournal/)
+[![Github Code
+Size](https://img.shields.io/github/languages/code-size/Illustratien/RSS.svg)](https://github.com/HU-IGPS/RSS)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--11--15-yellowgreen.svg)](https://github.com/HU-IGPS/RSS/commits/master)
+
 ## Introduction
 
 <img src="picture/logo.png" align="right" alt="logo" width="180" height = "200" style = "padding: 10px; border: none; float: right;">
@@ -76,9 +82,8 @@ source("src/RSS_subscribe.R")
 
 ### visualization
 
-``` r
-source("RSSreader/app.R")
-```
+run `RSSreader/app.R` and you will get your customize \[RSS reader\]
+(<https://0et5ol-tien0cheng.shinyapps.io/RSSjournal/>)
 
 ## Citing `RSS`
 

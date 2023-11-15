@@ -1,4 +1,6 @@
 # devtools::install_github("datawookie/feedeR")
 # remotes::install_github("robertmyles/tidyrss")
+source("src/schedule_task.R")
 source("src/RSS_subscribe.R")
+# source("RSSreader/app.R")
 # source("RSS.qmd")

@@ -1,6 +1,5 @@
-source("../src/advance_filter.R")
 pacman::p_load(tidyRSS,dplyr,DT,purrr,stringr,lubridate,shinydashboard,shiny)
-
+source("../src/advance_filter.R")
 fnam <- list.files("../data",".*raw.RDS")
 rawdf <- map_dfr(fnam,~{
   file.path("../data",.x) %>% readRDS()
@@ -19,7 +18,7 @@ ui <-   dashboardPage(
       menuItem('Keywords',
                icon = icon("dashboard"),
                startExpanded = TRUE,
-               helpText('Enter user-define key words:',size=20),
+
                menuSubItem(
                  # column(,wellPanel(
                  selectizeInput(
@@ -39,11 +38,8 @@ ui <-   dashboardPage(
     img(src='logo.png',width=150)
   ),
   dashboardBody(
-    # column(width =8,wellPanel( 
-    helpText('Output of the examples in the left:'),
-
-    # verbatimTextOutput('ex_out'),
-    verbatimTextOutput('pattern'),
+    helpText('Enter user-define key words:',size=20),
+    # verbatimTextOutput('pattern'),
     textOutput("n"), dataTableOutput("df")
   )
 )
@@ -67,15 +63,6 @@ server <-function(input, output) {
   nam <- reactive(expand.grid(names(op()),key()))
   pattern <- reactive({generate_pattern(key(),op())})
   # print(pattern)
-  
-  n.cores <- parallel::detectCores() - 1
-  #create the cluster
-  my.cluster <- parallel::makeCluster(
-    n.cores,
-    type = "PSOCK"
-  )
-  doParallel::registerDoParallel(cl = my.cluster)
-  
   # system.time(
   
   rdf <- reactive({
@@ -93,7 +80,7 @@ server <-function(input, output) {
       distinct() %>%
       # merge rows with different key words into one
       group_by(across(-key)) %>%
-      summarize(key = paste(key, collapse = ",")) %>%
+      summarize(key = paste(key, collapse = ","),.groups = "drop") %>%
       ungroup()
     
   })
