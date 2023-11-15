@@ -12,7 +12,10 @@ rawdf <- map_dfr(fnam,~{
 ui <-   dashboardPage(
   dashboardHeader(title="RSS Feed"),
   dashboardSidebar(
+
     sidebarMenu(
+      
+
       menuItem('Keywords',
                icon = icon("dashboard"),
                startExpanded = TRUE,
@@ -32,10 +35,13 @@ ui <-   dashboardPage(
                      select="yield",
                      multiple = TRUE,
                      options = list(create = TRUE)
-                   ))))),
+                   )))),
+    img(src='logo.png',width=150)
+  ),
   dashboardBody(
     # column(width =8,wellPanel( 
     helpText('Output of the examples in the left:'),
+
     # verbatimTextOutput('ex_out'),
     verbatimTextOutput('pattern'),
     textOutput("n"), dataTableOutput("df")

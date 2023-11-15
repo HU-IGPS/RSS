@@ -5,9 +5,9 @@ account: 0et5ol-tien0cheng
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10537735
-bundleId: 7932000
+bundleId: 7932064
 url: https://0et5ol-tien0cheng.shinyapps.io/RSSreader/
-when: 1700080466.44861
-lastSyncTime: 1700080466.44861
+when: 1700081898.53167
+lastSyncTime: 1700081898.53167
 asMultiple: FALSE
 asStatic: FALSE
