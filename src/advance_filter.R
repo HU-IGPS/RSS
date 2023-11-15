@@ -5,7 +5,7 @@ key <- c("wheat","crop")
 strawwsc <- sprintf("(?:%s\\s)?%s(?:\\sin\\s%s)", "straw","water[-\\s]?soluble carbohydrate", "straw")
 
 optional_patterns <- c(post="post[-\\s]?anthesis",# post-anthesis, post anthesis, postanthesis
-                       straw=strawwsc,
+                       carbohydrate=strawwsc,
                        yield="yield(?:[-\\s]?stability)?",# yield-stability, yield stability, yield
                        sink="(sink|source)",
                        breed="breeding(?:[-\\s]?progress)?",
