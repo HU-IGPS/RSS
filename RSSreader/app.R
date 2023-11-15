@@ -1,8 +1,8 @@
 pacman::p_load(tidyRSS,dplyr,DT,purrr,stringr,lubridate,shinydashboard,shiny)
-source("../src/advance_filter.R")
-fnam <- list.files("../data",".*raw.RDS")
+source("src/advance_filter.R")
+fnam <- list.files("data",".*raw.RDS")
 rawdf <- map_dfr(fnam,~{
-  file.path("../data",.x) %>% readRDS()
+  file.path("data",.x) %>% readRDS()
 }) %>% distinct()
 
 # -------------------------------------------------------------------------
