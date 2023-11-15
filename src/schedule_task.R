@@ -4,4 +4,4 @@ taskscheduleR::taskscheduler_create(taskname = "getRSS",
                      rscript = myscript, 
                      schedule = "DAILY", starttime = "12:00",
                      startdate = format(Sys.Date()+1, "%m/%d/%Y"))
-# taskscheduleR::taskscheduler_delete(taskname = "myfancyscriptdaily")
+# taskscheduleR::taskscheduler_delete(taskname = "getRSS")
