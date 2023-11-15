@@ -15,9 +15,14 @@ myfeeds <- data.frame(
     "New Phytologist"                     ,
     "Plant, Cell & Environment"         ,
     "Agricultural Systems"                ,
-    "Agronomy for Sustainable Development"
-    # "Annual Review of Plant Biology" 
-    ),
+    "Agronomy for Sustainable Development",
+    "nature","naturefood","natureplant",    "science",
+    "scientific report",
+    "Trends in Ecology & Evolution",
+    "PNASbio","PNASagri","PNASeco","PNASenv","PNASevo","PNASgene",
+    "Annual plant commuciation",
+    "Annual Review of Plant Biology"
+  ),
   feed_url =c("https://rss.sciencedirect.com/publication/science/03784290",
               "https://academic.oup.com/rss/site_5304/3170.xml",
               "https://rss.sciencedirect.com/publication/science/11610301",
@@ -31,20 +36,51 @@ myfeeds <- data.frame(
               "https://onlinelibrary.wiley.com/feed/14698137/most-recent",
               "https://onlinelibrary.wiley.com/feed/13653040/most-recent",
               "https://rss.sciencedirect.com/publication/science/0308521X",
-              "https://link.springer.com/search.rss?facet-journal-id=13593&package=openaccessarticles&search-within=Journal&query="
-              # "https://www.annualreviews.org/r/arplant_rss"
-             
+              "https://link.springer.com/search.rss?facet-journal-id=13593&package=openaccessarticles&search-within=Journal&query=",
+              "https://www.nature.com/nature.rss",
+              "https://www.nature.com/natfood.rss",
+              "https://www.nature.com/nplants.rss",
+              "https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=science",
+              "https://www.nature.com/srep.rss",
+              "http://www.cell.com/trends/ecology-evolution/current.rss",
+              "https://www.pnas.org/action/showFeed?type=searchTopic&taxonomyCode=topic&tagCode=bio-sci",
+              "https://www.pnas.org/action/showFeed?type=searchTopic&taxonomyCode=topic&tagCode=ag-sci",
+              "https://www.pnas.org/action/showFeed?type=searchTopic&taxonomyCode=topic&tagCode=eco",
+              "https://www.pnas.org/action/showFeed?type=searchTopic&taxonomyCode=topic&tagCodeOr=env-sci-bio&tagCodeOr=env-sci-soc&tagCodeOr=env-sci-phys",
+              "https://www.pnas.org/action/showFeed?type=searchTopic&taxonomyCode=topic&tagCode=evolution",
+              "https://www.pnas.org/action/showFeed?type=searchTopic&taxonomyCode=topic&tagCode=genetics",
+              "https://www.annualreviews.org/action/showFeed?ui=45mu4&mi=3fndc3&ai=s0&jc=ecolsys&type=etoc&feed=atom%20",
+              "https://www.annualreviews.org/r/arplant_rss"
   )
 ) %>% 
   arrange(feed_title)
 
 wrangle_feed <- function(the_feed_url, the_feed_dataframe = myfeeds) {
-  my_feed_data <- tidyRSS::tidyfeed(the_feed_url)
+  my_feed_data<- tryCatch({
+    tidyRSS::tidyfeed(the_feed_url) %>% suppressMessages()
+  },error=function(cond){
+    feedeR::feed.extract(the_feed_url) %>% .$items %>% 
+      rename(feed_last_build_date=date,item_description=description,
+             item_title=title,item_link=link)
+  })
+
+  
+  
   if(!any(grepl("feed_last_build_date",names(my_feed_data)))){
-    my_feed_data <- my_feed_data %>% 
-      rename(feed_last_build_date=feed_pub_date)
+    if(!any(grepl("feed_pub_date",names(my_feed_data)))){
+      my_feed_data <- my_feed_data %>% 
+        mutate(feed_last_build_date=NA)
+    }else{
+      my_feed_data <- my_feed_data %>% 
+        rename(feed_last_build_date=feed_pub_date)
+    }
+    
   }
   
+  if(!any(grepl("item_description",names(my_feed_data)))){
+    my_feed_data <- my_feed_data %>% 
+      mutate(item_description=NA)
+  }
   my_feed_data <- my_feed_data %>% 
     select(feed_last_build_date,item_link,item_title,item_description)
   return(my_feed_data)
