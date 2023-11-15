@@ -16,10 +16,10 @@ myfeeds <- data.frame(
     "Plant, Cell & Environment"         ,
     "Agricultural Systems"                ,
     "Agronomy for Sustainable Development",
-    "nature","naturefood","natureplant",    "science",
+    "Nature","Nature food","Nature plant",    "Science",
     "scientific report",
     "Trends in Ecology & Evolution",
-    "PNASbio","PNASagri","PNASeco","PNASenv","PNASevo","PNASgene",
+    "PNAS bio","PNAS agri","PNAS eco","PNAS env","PNAS evo","PNAS gene",
     "Annual plant commuciation",
     "Annual Review of Plant Biology"
   ),
@@ -63,8 +63,6 @@ wrangle_feed <- function(the_feed_url, the_feed_dataframe = myfeeds) {
       rename(feed_last_build_date=date,item_description=description,
              item_title=title,item_link=link)
   })
-
-  
   
   if(!any(grepl("feed_last_build_date",names(my_feed_data)))){
     if(!any(grepl("feed_pub_date",names(my_feed_data)))){
@@ -82,61 +80,69 @@ wrangle_feed <- function(the_feed_url, the_feed_dataframe = myfeeds) {
       mutate(item_description=NA)
   }
   my_feed_data <- my_feed_data %>% 
-    select(feed_last_build_date,item_link,item_title,item_description)
+    dplyr::select(feed_last_build_date,item_link,item_title,item_description)
   return(my_feed_data)
 }
 
-RSS_ls<- purrr::imap(1:nrow(myfeeds), ~{
-  # print(.y)
+pb = txtProgressBar(min = 0, max = nrow(myfeeds),
+                    style = 3,    # Progress bar style (also available style = 1 and style = 2)
+                    width = 30,initial = 0)
+
+RSS_ls<- purrr::map(1:nrow(myfeeds), ~{
+  # print(.x)
   # print(myfeeds$feed_title[.y])
-  wrangle_feed(myfeeds[.x,"feed_url"])
+  res <- wrangle_feed(myfeeds[.x,"feed_url"])%>%
+    mutate(journal=myfeeds$feed_title[.x])
+  # print(nrow(res))
+  setTxtProgressBar(pb,.x)
+  return(res)
 })
 
 sdf <- RSS_ls %>% Reduce("rbind",.)
 saveRDS(sdf,paste0(getwd(),"/data/",sprintf("%s_raw.RDS",Sys.Date())),
         compress=T)
 # -------------------------------------------------------------------------
+# 
+# source("src/advance_filter.R")
+# pattern <- generate_pattern(key, optional_patterns)
+# # print(pattern)
+# 
+# n.cores <- parallel::detectCores() - 1
+# #create the cluster
+# my.cluster <- parallel::makeCluster(
+#   n.cores,
+#   type = "PSOCK"
+# )
+# doParallel::registerDoParallel(cl = my.cluster)
+# 
+# system.time(
+#   res <- foreach(
+#     i  = 1:length(pattern),
+#     .packages = c("dplyr","purrr")
+#   ) %dopar% {
+#     
+#     source("src/advance_filter.R")
+#     # or define it here
+#     c( # search in title 
+#       grepl(pattern[i],sdf$item_title,ignore.case = T,perl=T) %>% which() 
+#       ,# search in abstract
+#       grepl(pattern[i],sdf$item_description,ignore.case = T,perl=T) %>% which()
+#     )%>%unique() %>% 
+#       sdf[.,] %>% 
+#       mutate(key=nam$Var1[i])
+#     
+#   }
+# )
+# 
+# doParallel::stopImplicitCluster()
+# 
+# rdf <- res %>% Reduce("rbind",.) %>% 
+#   # remove same journal that match more than one key
+#   distinct() %>% 
+#   # merge rows with different key words into one
+#   group_by(across(-key)) %>%
+#   summarize(key = paste(key, collapse = ",")) %>%
+#   ungroup()
 
-source("src/advance_filter.R")
-pattern <- generate_pattern(key, optional_patterns)
-# print(pattern)
-
-n.cores <- parallel::detectCores() - 1
-#create the cluster
-my.cluster <- parallel::makeCluster(
-  n.cores,
-  type = "PSOCK"
-)
-doParallel::registerDoParallel(cl = my.cluster)
-
-system.time(
-  res <- foreach(
-    i  = 1:length(pattern),
-    .packages = c("dplyr","purrr")
-  ) %dopar% {
-    
-    source("src/advance_filter.R")
-    # or define it here
-    c( # search in title 
-      grepl(pattern[i],sdf$item_title,ignore.case = T,perl=T) %>% which() 
-      ,# search in abstract
-      grepl(pattern[i],sdf$item_description,ignore.case = T,perl=T) %>% which()
-    )%>%unique() %>% 
-      sdf[.,] %>% 
-      mutate(key=nam$Var1[i])
-    
-  }
-)
-
-doParallel::stopImplicitCluster()
-
-rdf <- res %>% Reduce("rbind",.) %>% 
-  # remove same journal that match more than one key
-  distinct() %>% 
-  # merge rows with different key words into one
-  group_by(across(-key)) %>%
-  summarize(key = paste(key, collapse = ",")) %>%
-  ungroup()
-
-saveRDS(rdf,paste0(getwd(),"/data/",sprintf("%s.RDS",Sys.Date())),
-        compress=T)
+# saveRDS(rdf,paste0(getwd(),"/data/",sprintf("%s.RDS",Sys.Date())),
+#         compress=T)
