@@ -5,9 +5,9 @@ account: 0et5ol-tien0cheng
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10539095
-bundleId: 7932407
+bundleId: 7936132
 url: https://0et5ol-tien0cheng.shinyapps.io/RSSjournal/
-when: 1700088764.33346
-lastSyncTime: 1700088764.33346
+when: 1700160993.17724
+lastSyncTime: 1700160993.17724
 asMultiple: FALSE
 asStatic: FALSE

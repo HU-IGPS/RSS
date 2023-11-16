@@ -6,7 +6,7 @@ strawwsc <- sprintf("(?:%s\\s)?%s(?:\\sin\\s%s)", "straw","water[-\\s]?soluble c
 
 optional_patterns <- c(post="post[-\\s]?anthesis",# post-anthesis, post anthesis, postanthesis
                        carbohydrate=strawwsc,
-                       yield="yield(?:[-\\s]?stability)?",# yield-stability, yield stability, yield
+                       # yield="yield(?:[-\\s]?stability)?",# yield-stability, yield stability, yield
                        sink="(sink|source)",
                        breed="breeding(?:[-\\s]?progress)?",
                        green="stay[-\\s]?green",
@@ -26,12 +26,14 @@ generate_pattern <- function(key, optional_patterns) {
   # Construct the regular expression pattern
   res <- purrr::map(key,~{
     pattern <- paste0(
-      "(?i)",  # Case-insensitive
+      # "(?-i)",  # set to not Case-insensitive
       # must have part
-      paste0("(?=.*", .x, ")"),
+      anypo(.x),
+      # paste0("(?=.*", .x, ")"),
       # key %>% purrr::map(.,anypo) %>% Reduce("paste0",.),
       # optional part
-      "(?=.*", paste0("(?:", optional_patterns, ")+"), ")"
+      anypo(paste0("(?:", optional_patterns, ")+"))
+      # "(?=.*", paste0("(?:", optional_patterns, ")+"), ")"
     )
   }) %>% Reduce("c",.)
 
