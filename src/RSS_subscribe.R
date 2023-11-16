@@ -1,6 +1,7 @@
 rm(list=ls())
 pacman::p_load(dplyr,purrr,foreach)
-source("src/feed_list.R")
+hdir <- "D:/Seafile/RSS"
+source(paste0(hdir,"/src/feed_list.R"))
 
 wrangle_feed <- function(the_feed_url, the_feed_dataframe = myfeeds) {
   my_feed_data<- tryCatch({
@@ -46,7 +47,7 @@ RSS_ls<- purrr::map(1:nrow(myfeeds), ~{
 })
 
 sdf <- RSS_ls %>% Reduce("rbind",.)
-saveRDS(sdf,paste0(getwd(),"/data/",sprintf("%s_raw.RDS",Sys.Date())),
+saveRDS(sdf,paste0(hdir,"/data/",sprintf("%s_raw.RDS",Sys.Date())),
         compress=T)
 # -------------------------------------------------------------------------
 # 
