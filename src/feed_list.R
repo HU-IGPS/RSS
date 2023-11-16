@@ -19,7 +19,8 @@ myfeeds <- data.frame(
     "Trends in Ecology & Evolution",
     "PNAS bio","PNAS agri","PNAS eco","PNAS env","PNAS evo","PNAS gene",
     "Annual plant commuciation",
-    "Annual Review of Plant Biology"
+    "Annual Review of Plant Biology",
+    "In silico plants"
   ),
   feed_url =c("https://rss.sciencedirect.com/publication/science/03784290",
               "https://academic.oup.com/rss/site_5304/3170.xml",
@@ -48,7 +49,8 @@ myfeeds <- data.frame(
               "https://www.pnas.org/action/showFeed?type=searchTopic&taxonomyCode=topic&tagCode=evolution",
               "https://www.pnas.org/action/showFeed?type=searchTopic&taxonomyCode=topic&tagCode=genetics",
               "https://www.annualreviews.org/action/showFeed?ui=45mu4&mi=3fndc3&ai=s0&jc=ecolsys&type=etoc&feed=atom%20",
-              "https://www.annualreviews.org/r/arplant_rss"
+              "https://www.annualreviews.org/r/arplant_rss",
+              "https://academic.oup.com/rss/site_6190/4018.xml"
   )
 ) %>% 
   arrange(feed_title)
