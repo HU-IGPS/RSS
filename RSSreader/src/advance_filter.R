@@ -2,8 +2,8 @@
 key <- c("wheat","crop")
 # special pattern for straw WSC
 ## straw WSC, WSC or WSC in straw
-strawwsc <- sprintf("(?:%s\\s)?%s(?:\\sin\\s%s)", "straw","water[-\\s]?soluble carbohydrate", "straw")
-
+strawwsc <- "(?:straw|non[-\\s]?structural|water[-\\s]?soluble)?(?:carbohydrate|sugar|fructan|carbon[-\\s]?assimilat)(?:in straw|straw)?"
+# sprintf("(?:%s\\s)?%s(?:\\sin\\s%s)", "straw","water[-\\s]?soluble carbohydrate", "straw")
 optional_patterns <- c(post="post[-\\s]?anthesis",# post-anthesis, post anthesis, postanthesis
                        carbohydrate=strawwsc,
                        # yield="yield(?:[-\\s]?stability)?",# yield-stability, yield stability, yield
