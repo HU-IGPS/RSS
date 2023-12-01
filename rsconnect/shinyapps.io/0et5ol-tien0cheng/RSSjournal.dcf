@@ -1,0 +1,14 @@
+name: RSSjournal
+title: RSSjournal
+username:
+account: 0et5ol-tien0cheng
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10539095
+bundleId: 7954320
+url: https://0et5ol-tien0cheng.shinyapps.io/RSSjournal/
+when: 1700593869.77236
+lastSyncTime: 1700593869.77236
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: picture/logo.png|picture/logo2.png|README.md|README.Rmd|RSSreader|src

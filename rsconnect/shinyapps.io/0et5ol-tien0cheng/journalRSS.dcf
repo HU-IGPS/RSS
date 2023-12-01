@@ -1,0 +1,13 @@
+name: journalRSS
+title: journalRSS
+username:
+account: 0et5ol-tien0cheng
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10538201
+bundleId: 7932317
+url: https://0et5ol-tien0cheng.shinyapps.io/journalRSS/
+when: 1700086524.13148
+lastSyncTime: 1700086524.13148
+asMultiple: FALSE
+asStatic: FALSE
